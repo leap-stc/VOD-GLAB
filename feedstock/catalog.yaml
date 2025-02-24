@@ -8,7 +8,7 @@ tags:
   - LAI
 
 stores:
-  - id: "MODIS-LAI"
+  - id: "MOD15A2GFS"
     name: "MOD15A2GFS- MOD:MODIS, 15:product identifier,A2:resolution, GFS: Global Fixed Grid, 006: Collection 6"
     url: "https://nyu1.osn.mghpcc.org/leap-pangeo-pipeline/MOD15A2GFS/MODIS-LAI.zarr"
 
