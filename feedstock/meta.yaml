@@ -1,20 +1,21 @@
-title: "LEAP Data Library Prototype"
+title: "MODIS-LAI"
 description: >
   A prototype test for the LEAP Data Library refactor
 recipes:
-  - id: "small"
-    object: "recipe:small"
-  - id: "large"
-    object: "recipe:large"
+  - id: "MODIS-LAI"
+    object: "recipe:MODIS-LAI"
 provenance:
   providers:
-    - name: "Julius"
-      description: "Just a guy testing some recipes. Nothing to see here."
+    - name: "NASA MODIS"
+      description: "Level-1 and Atmosphere Archive & Distribution System
+Distributed Active Archive Center"
       roles:
-        - producer
+        - host
+        url: https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD15A2GFS/
         - licensor
-  license: "Just a Test"
+  license: "NASA Open Data- Creative Commons Zero (CC0)"
 maintainers:
-  - name: "Julius Busecke"
-    orcid: "0000-0001-8571-865X"
-    github: jbusecke
+  - name: "Raphael Hagen"
+    github: norlandrhagen
+  - name: "Mitra Cattry"
+    github: mitraA90
