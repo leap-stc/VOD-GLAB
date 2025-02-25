@@ -7,8 +7,7 @@ recipes:
 provenance:
   providers:
     - name: "NASA MODIS"
-      description: "Level-1 and Atmosphere Archive & Distribution System
-Distributed Active Archive Center"
+      description: "NASA"
       roles:
         - host
         url: https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD15A2GFS/
