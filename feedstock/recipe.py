@@ -141,7 +141,6 @@ pipeline = (
     | OpenURLWithFSSpec()            # Download files with fsspec and EarthAccess authentication.
     | OpenWithXarray()               # Open each file as an xarray.Dataset.
     | AddLatLonCoordinates()         # Compute and add lat/lon coordinates.
-    | RenameDate()                   # Rename 'acq_date' to 'time' for concatenation.
     | StoreToZarr(
           store_name="mod15a2h_lai.zarr",
           combine_dims=pattern.combine_dim_keys,
