@@ -1,5 +1,5 @@
 # All the information important to cataloging.
-"ncviewjs:meta_yaml_url": "https://github.com/leap-stc/MODIS-LAI/blob/main/feedstock/meta.yaml" 
+"ncviewjs:meta_yaml_url": "https://github.com/leap-stc/MODIS-LAI/blob/main/feedstock/meta.yaml"
 tags:
   - leaf area index
   - global
@@ -11,4 +11,3 @@ stores:
   - id: "MODIS-LAI"
     name: "MOD15A2GFS- MOD:MODIS LAI high resolution GFS Collection 6"
     url: "https://nyu1.osn.mghpcc.org/leap-pangeo-pipeline/MODIS-LAI/MODIS-LAI.zarr"
-
