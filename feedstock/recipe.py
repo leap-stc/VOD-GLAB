@@ -16,9 +16,6 @@ from pangeo_forge_recipes.transforms import (
     StoreToZarr,
 )
 
-# parse the catalog store locations (this is where the data is copied to after successful write (and maybe testing)
-catalog_store_urls = get_catalog_store_urls('feedstock/catalog.yaml')
-
 ###########################
 ## Start Modifying here ###
 ###########################
