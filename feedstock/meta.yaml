@@ -1,20 +1,54 @@
-title: "MODIS-LAI"
 description: >
-  A prototype test for the LEAP Data Library refactor
+  A prototype test for the LEAP Data Library refactor, utilizing reprocessed MODIS Version 6.1 Leaf Area Index (LAI) datasets for land surface and climate modeling applications.
+
 recipes:
   - id: "MODIS-LAI"
     object: "recipe:MODIS-LAI"
+
 provenance:
   providers:
     - name: "NASA MODIS"
-      description: "NASA"
+      description: "NASA Earth Observing System Data and Information System (EOSDIS)"
       roles:
         - host
-        url: https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD15A2GFS/
         - licensor
-  license: "NASA Open Data- Creative Commons Zero (CC0)"
+      url: https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD15A2GFS/
+
+    - name: "Beijing Normal University (BNU) - Global Change Research Group"
+      description: "Provider of the reprocessed GLOBMAP Leaf Area Index dataset"
+      roles:
+        - data provider
+        - research institution
+      url: http://globalchange.bnu.edu.cn/research/laiv061#usage
+
+  license: "NASA Open Data - Creative Commons Zero (CC0)"
+
+acknowledgements: >
+  The MODIS LAI and land cover type products were obtained from the NASA EOSDIS Land Processes Distributed Active Archive Center (LP DAAC) at https://lpdaac.usgs.gov. We acknowledge **Beijing Normal University (BNU) - Global Change Research Group** for providing the **GLOBMAP Leaf Area Index (LAI) dataset**, accessible at http://globalchange.bnu.edu.cn/research/laiv061#usage. We also acknowledge Per Jönsson and Lars Eklundh for providing the TIMESAT software, as well as the VALERI project, BigFoot science team, and CEOS LPV group for making LAI reference maps available. Additionally, this study incorporates high-resolution LAI reference maps from the GBOV (“Ground-Based Observation for Validation”) project, part of the Global Component of the European Union’s Copernicus Land Monitoring Service. GBOV products were developed and managed by ACRI-ST with contributions from University College London, University of Leicester, University of Southampton, University of Valencia, and Informus GmbH. We extend our gratitude to Courtney Meier, Alexander Knohl, Lukas Siebicke, J. William Munger, Katherine N. Suding, Will Woodgate, Ernesto Lopez-Baeza, and the NEON, FLUXNET, TREN, and UVEG networks for their field measurements that contributed to the GBOV products. Additionally, we thank Aryeh Feinberg for feedback on an earlier version of the reprocessed LAI data and Luke Brown for recommending the use of GBOV reference maps.
+
+citation:
+  - authors: "Lin, W., Yuan, H., Dong, W., Zhang, S., Liu, S., Wei, N., Lu, X., Wei, Z., Hu, Y., Dai, Y."
+    year: 2023
+    title: "Reprocessed MODIS Version 6.1 Leaf Area Index Dataset and Its Evaluation for Land Surface and Climate Modeling"
+    journal: "Remote Sensing"
+    volume: 15
+    pages: 1780
+    doi: "10.3390/rs15071780"
+
+  - authors: "Yuan, H., Dai, Y., Xiao, Z., Ji, D., Shangguan, W."
+    year: 2011
+    title: "Reprocessing the MODIS Leaf Area Index Products for Land Surface and Climate Modelling"
+    journal: "Remote Sensing of Environment"
+    volume: 115
+    issue: 5
+    pages: "1171-1187"
+    doi: "10.1016/j.rse.2011.01.001"
+
+contact:
+  email: "yuanh25@mail.sysu.edu.cn"
+
 maintainers:
   - name: "Raphael Hagen"
-    github: norlandrhagen
+    github: "norlandrhagen"
   - name: "Mitra Cattry"
-    github: mitraA90
+    github: "mitraA90"
