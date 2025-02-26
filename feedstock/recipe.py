@@ -2,6 +2,7 @@
 MODIS-LAI
 """
 # nasa data link: https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD15A2GFS/
+# the version here is provided by BNU
 # data managment issue: https://github.com/leap-stc/data-management/issues/188
 import apache_beam as beam
 from leap_data_management_utils.data_management_transforms import (
@@ -23,17 +24,6 @@ input_urls = [
     f'http://globalchange.bnu.edu.cn/laiv061/global_lai_0.05/lai_8-day_0.05_{year}.nc'
     for year in np.arange(2002, 2020 + 1)
 ]
-@dataclass
-class RenameC(beam.PTransform):
-    """
-    this function rename columns
-    """
-    def _rename_date(self, ds: xr.Dataset) -> xr.Dataset:
-        return ds.rename({'acq_date': 'time'})
-    
-    def expand(self, pcoll):
-        return pcoll | beam.MapTuple(lambda filename, ds: (filename, self._rename_date(ds)))
-
 pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
 
 # Construct the pipeline.
@@ -41,7 +31,6 @@ modis-lai = (
     beam.Create(pattern.items())
     | OpenURLWithFSSpec()            # Download files with fsspec and EarthAccess authentication.
     | OpenWithXarray()               # Open each file as an xarray.Dataset.
-    | RenameC()                      # Rename columns
     | StoreToZarr(
           store_name="modis-lai.zarr",
           combine_dims=pattern.combine_dim_keys,
