@@ -6,8 +6,12 @@ tags:
   - remote sensing
   - MODIS
   - LAI
+  - GLOBMAP
+  - Beijing Normal University
 
 stores:
-  - id: "MODIS-LAI"
-    name: "MOD15A2GFS- MOD:MODIS LAI high resolution GFS Collection 6"
-    url: "https://nyu1.osn.mghpcc.org/leap-pangeo-pipeline/MODIS-LAI/MODIS-LAI.zarr"
+  - id: "modis-lai"
+    name: "MOD15A2GFS - MODIS LAI high-resolution GFS Collection 6 (Provided by BNU GLOBMAP)"
+    url: "https://nyu1.osn.mghpcc.org/leap-pangeo-pipeline/MODIS-LAI/modis-lai.zarr"
+    source: "Beijing Normal University (BNU) - Global Change Research Group"
+    source_url: "http://globalchange.bnu.edu.cn/research/laiv061_download.jsp"
