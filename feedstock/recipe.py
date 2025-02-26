@@ -1,8 +1,7 @@
 """
 MODIS-LAI
 """
-# nasa data link: https://ladsweb.modaps.eosdis.nasa.gov/archive/allData/6/MOD15A2GFS/
-# the version here is provided by BNU
+# the modified MOD15A2GFS version sourced from nasa data is provided here by BNU data link: http://globalchange.bnu.edu.cn/research/laiv061#usage
 # data managment issue: https://github.com/leap-stc/data-management/issues/188
 import apache_beam as beam
 from leap_data_management_utils.data_management_transforms import (
