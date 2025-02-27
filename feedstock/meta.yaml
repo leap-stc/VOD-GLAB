@@ -1,5 +1,5 @@
 description: >
-  A prototype test for the LEAP Data Library refactor, utilizing reprocessed MODIS Version 6.1 Leaf Area Index (LAI) datasets for land surface and climate modeling applications.
+Reprocessed MODIS Version 6.1 Leaf Area Index (LAI) datasets for land surface and climate modeling applications.
 
 recipes:
   - id: "MODIS-LAI"
