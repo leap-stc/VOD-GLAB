@@ -1,5 +1,5 @@
-description: >
-Reprocessed MODIS Version 6.1 Leaf Area Index (LAI) datasets for land surface and climate modeling applications.
+title: "MODIS LAI"
+description: Reprocessed MODIS Version 6.1 Leaf Area Index (LAI) datasets for land surface and climate modeling applications.
 
 recipes:
   - id: "MODIS-LAI"
@@ -48,7 +48,7 @@ contact:
   email: "yuanh25@mail.sysu.edu.cn"
 
 maintainers:
-  - name: "Raphael Hagen"
-    github: "norlandrhagen"
   - name: "Mitra Cattry"
     github: "mitraA90"
+  - name: "Raphael Hagen"
+    github: "norlandrhagen"
