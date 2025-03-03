@@ -7,6 +7,7 @@ MODIS-LAI
 from dataclasses import dataclass
 
 import apache_beam as beam
+import fsspec
 
 # from leap_data_management_utils.data_management_transforms import (
 #     get_catalog_store_urls,
@@ -15,13 +16,11 @@ import numpy as np
 import pandas as pd
 import s3fs
 import xarray as xr
+from obstore.fsspec import AsyncFsspecStore
+from obstore.store import S3Store
 from pangeo_forge_recipes.patterns import pattern_from_file_sequence
 from pangeo_forge_recipes.storage import FSSpecTarget
 from pangeo_forge_recipes.transforms import (
-    ConsolidateDimensionCoordinates,
-    ConsolidateMetadata,
-    OpenURLWithFSSpec,
-    OpenWithXarray,
     StoreToZarr,
 )
 
@@ -33,6 +32,8 @@ input_urls = [
 
 
 pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
+# NOTE! this is pruned for testing
+pattern = pattern.prune(2)
 
 
 @dataclass
@@ -48,25 +49,44 @@ class FixTime(beam.PTransform):
         return pcoll | '_fixtime' >> beam.MapTuple(lambda k, v: (k, self._fixtime(v)))
 
 
+@dataclass
+class OpenXarrayObsStore(beam.PTransform):
+    read_fss: AsyncFsspecStore
+
+    def _obs(self, url: str) -> xr.Dataset:
+        _, suffix = url.rsplit('/', 1)
+        return xr.open_dataset(self.read_fss.open(suffix), engine='h5netcdf')
+
+    def expand(self, pcoll):
+        return pcoll | 'obs' >> beam.MapTuple(lambda k, v: (k, self._obs(v)))
+
+
+read_store = S3Store(
+    'leap-pangeo-manual/MODIS_LAI',
+    aws_endpoint='https://nyu1.osn.mghpcc.org',
+    access_key_id='',
+    secret_access_key='',
+)
+read_fss = AsyncFsspecStore(read_store)
+
 fs = s3fs.S3FileSystem(
     key='', secret='', client_kwargs={'endpoint_url': 'https://nyu1.osn.mghpcc.org'}
 )
 target_root = FSSpecTarget(fs, 'leap-pangeo-pipeline/MODIS_LAI')
 
 
+fs = fsspec.get_filesystem_class('file')()
+target_root = FSSpecTarget(fs, 'modis_LAI')
 with beam.Pipeline() as p:
     (
         p
         | beam.Create(pattern.items())
-        | OpenURLWithFSSpec()
-        | OpenWithXarray()
+        | OpenXarrayObsStore(read_fss=read_fss)
         | FixTime()
         | StoreToZarr(
             target_root=target_root,
             target_chunks={'time': 100, 'lat': 360, 'lon': 720},
-            store_name='MODIS_LAI.zarr',
+            store_name='MODIS_LAI_obs.zarr',
             combine_dims=pattern.combine_dim_keys,
         )
-        | ConsolidateDimensionCoordinates()
-        | ConsolidateMetadata()
     )
