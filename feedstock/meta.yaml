@@ -1,5 +1,5 @@
 title: "MODIS LAI"
-description: Reprocessed MODIS Version 6.1 Leaf Area Index (LAI) datasets for land surface and climate modeling applications.
+description: Reprocessed MODIS Version 6.1 Leaf Area Index (LAI) datasets for land surface and climate modeling applications. MOD15A2GFS -- high-resolution GFS Collection 6 (Provided by BNU GLOBMAP)
 
 recipes:
   - id: "MODIS-LAI"
