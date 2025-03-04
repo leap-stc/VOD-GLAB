@@ -32,8 +32,6 @@ input_urls = [
 
 
 pattern = pattern_from_file_sequence(input_urls, concat_dim='time')
-# NOTE! this is pruned for testing
-pattern = pattern.prune(2)
 
 
 @dataclass
