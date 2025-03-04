@@ -7,7 +7,6 @@ MODIS-LAI
 from dataclasses import dataclass
 
 import apache_beam as beam
-import fsspec
 
 # from leap_data_management_utils.data_management_transforms import (
 #     get_catalog_store_urls,
@@ -72,9 +71,6 @@ fs = s3fs.S3FileSystem(
 )
 target_root = FSSpecTarget(fs, 'leap-pangeo-pipeline/MODIS_LAI')
 
-
-fs = fsspec.get_filesystem_class('file')()
-target_root = FSSpecTarget(fs, 'modis_LAI')
 with beam.Pipeline() as p:
     (
         p
@@ -84,7 +80,7 @@ with beam.Pipeline() as p:
         | StoreToZarr(
             target_root=target_root,
             target_chunks={'time': 100, 'lat': 360, 'lon': 720},
-            store_name='MODIS_LAI_obs.zarr',
+            store_name='MODIS_LAI.zarr',
             combine_dims=pattern.combine_dim_keys,
         )
     )
