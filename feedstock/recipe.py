@@ -1,61 +1,75 @@
-# switched to dask 'recipe'
-# input files were transfered in `transfer.sh` to LEAP OSN due to very slow server
+#---------------------------------------------------------
+# loading packages
+#---------------------------------------------------------
 
 import numpy as np
 import xarray as xr
-from obstore.fsspec import AsyncFsspecStore
-from obstore.store import S3Store
-import pandas as pd
-from dask.distributed import Client
+from dask.distributed import Client, LocalCluster
+from itertools import islice
 import s3fs
+#---------------------------------------------------------
+# 1. initialization and defining variables
+#---------------------------------------------------------
 
-client = Client()
-client
+cluster = LocalCluster(n_workers=2, threads_per_worker=2)
+client = Client(cluster)
 
-input_urls = [
-    f"https://nyu1.osn.mghpcc.org/leap-pangeo-manual/MODIS_LAI/lai_8-day_0.05_{year}.nc"
-    for year in np.arange(2002, 2020 + 1)
+
+# NetCDF URLs on zenedo
+netcdf_urls = [
+    f"https://zenodo.org/records/10306095/files/GLAB_VOD_{year}.nc?download=1"
+    for year in np.arange(2002, 2021)
 ]
-input_url_suffixes = [url.rsplit("/", 1)[-1] for url in input_urls]
 
+def batch(iterable, n=1):
+    it = iter(iterable)
+    while True:
+        chunk = list(islice(it, n))
+        if not chunk:
+            break
+        yield chunk
 
-read_store = S3Store(
-    "leap-pangeo-manual/MODIS_LAI",
-    aws_endpoint="https://nyu1.osn.mghpcc.org",
-    access_key_id="",
-    secret_access_key="",
-)
-read_fss = AsyncFsspecStore(read_store)
+batches = list(batch(netcdf_urls, n=5))# to avoid TOO MANY REQUESTS error from Zenodo
+#---------------------------------------------------------
+# 2. loading the data
+#---------------------------------------------------------
+datasets = []
+import time
+for batch in batches:
+    print(batch)
+    ds = xr.open_mfdataset(
+        batch,
+        engine="h5netcdf",
+        combine="by_coords",
+        coords="minimal",
+        data_vars="minimal",
+        compat="override",
+        parallel=True
+    )
+    datasets.append(ds)
+    
+    time.sleep(25)# to avoid TOO MANY REQUESTS error from Zenodo
+cds = xr.combine_by_coords(datasets)
 
+#---------------------------------------------------------
+# 3. writting the zarr file
+#-------------------------------------------------------
 
-def preprocess(ds: xr.Dataset) -> xr.Dataset:
-    year = ds.time.encoding["source"].split("lai_8-day_0.05_")[1].split(".nc>")[0]
-    dates = pd.to_datetime([f"{year}-{doy}" for doy in ds.time.values], format="%Y-%j")
-    return ds.assign_coords(time=dates)
-
-
-cds = xr.open_mfdataset(
-    [read_fss.open(suffix) for suffix in input_url_suffixes],
-    preprocess=preprocess,
-    parallel=True,
-    coords="minimal",
-    data_vars="minimal",
-    compat="override",
-)
 
 fs = s3fs.S3FileSystem(
     key="", secret="", client_kwargs={"endpoint_url": "https://nyu1.osn.mghpcc.org"}
 )
 
-mapper = fs.get_mapper("leap-pangeo-pipeline/MODIS_LAI/MODIS_LAI.zarr")
+mapper = fs.get_mapper("leap-pangeo-pipeline/VOD-GLAB/VOD-GLAB.zarr")
 
 cds.chunk({"time": 100, "lat": 360, "lon": 720}).to_zarr(
     mapper, mode="w", consolidated=True
 )
 
-# check RT
+#---------------------------------------------------------
+# 4. reading and plotting
+#-------------------------------------------------------
 
-
-store = "https://nyu1.osn.mghpcc.org/leap-pangeo-pipeline/MODIS_LAI/MODIS_LAI.zarr"
+store = "https://nyu1.osn.mghpcc.org/leap-pangeo-pipeline/VOD-GLAB/VOD-GLAB.zarr"
 ds = xr.open_dataset(store, engine="zarr", chunks={})
-ds.isel(time=0).lai.plot()
+ds.isel(time=0).VOD.plot()
