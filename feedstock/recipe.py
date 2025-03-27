@@ -1,3 +1,6 @@
+# switched to dask 'recipe'
+# input files were transfered in `transfer.sh` to LEAP OSN due to very slow server
+!pip install s3fs
 #---------------------------------------------------------
 # loading packages
 #---------------------------------------------------------
@@ -30,13 +33,13 @@ def batch(iterable, n=1):
         yield chunk
 
 batches = list(batch(netcdf_urls, n=5))# to avoid TOO MANY REQUESTS error from Zenodo
+
 #---------------------------------------------------------
-# 2. loading the data
+# 2. loading the data and writing into zarr format
 #---------------------------------------------------------
-datasets = []
+
 import time
-for batch in batches:
-    print(batch)
+for i, batch in enumerate(batches):
     ds = xr.open_mfdataset(
         batch,
         engine="h5netcdf",
@@ -46,25 +49,17 @@ for batch in batches:
         compat="override",
         parallel=True
     )
-    datasets.append(ds)
+    #time.sleep(22)# to avoid TOO MANY REQUESTS error from Zenodo
+    ds = ds.chunk({"time": 100, "lat": 360, "lon": 720})
+    if i == 0:
+        writing_mode="w"
+    else:
+        writing_mode="a"
+        cds.chunk({"time": 100, "lat": 360, "lon": 720}).to_zarr(
+            mapper, mode=writing_mode, consolidated=True
+        )
+    time.sleep(30)# to avoid TOO MANY REQUESTS error from Zenodo
     
-    time.sleep(25)# to avoid TOO MANY REQUESTS error from Zenodo
-cds = xr.combine_by_coords(datasets)
-
-#---------------------------------------------------------
-# 3. writting the zarr file
-#-------------------------------------------------------
-
-
-fs = s3fs.S3FileSystem(
-    key="", secret="", client_kwargs={"endpoint_url": "https://nyu1.osn.mghpcc.org"}
-)
-
-mapper = fs.get_mapper("leap-pangeo-pipeline/VOD-GLAB/VOD-GLAB.zarr")
-
-cds.chunk({"time": 100, "lat": 360, "lon": 720}).to_zarr(
-    mapper, mode="w", consolidated=True
-)
 
 #---------------------------------------------------------
 # 4. reading and plotting
