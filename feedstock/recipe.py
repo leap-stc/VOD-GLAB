@@ -16,7 +16,11 @@ import s3fs
 
 cluster = LocalCluster(n_workers=2, threads_per_worker=2)
 client = Client(cluster)
-
+s3_fs = s3fs.S3FileSystem(
+    anon=True, 
+    client_kwargs={"endpoint_url": "https://nyu1.osn.mghpcc.org"}
+)
+mapper = s3_fs.get_mapper("leap-pangeo-pipeline/GLEAM/GLEAM.zarr")
 
 # NetCDF URLs on zenedo
 netcdf_urls = [
@@ -32,8 +36,7 @@ def batch(iterable, n=1):
             break
         yield chunk
 
-batches = list(batch(netcdf_urls, n=5))# to avoid TOO MANY REQUESTS error from Zenodo
-
+batches = list(batch(netcdf_urls, n=5))
 #---------------------------------------------------------
 # 2. loading the data and writing into zarr format
 #---------------------------------------------------------
@@ -50,15 +53,15 @@ for i, batch in enumerate(batches):
         parallel=True
     )
     #time.sleep(22)# to avoid TOO MANY REQUESTS error from Zenodo
-    ds = ds.chunk({"time": 100, "lat": 360, "lon": 720})
     if i == 0:
         writing_mode="w"
     else:
         writing_mode="a"
-        cds.chunk({"time": 100, "lat": 360, "lon": 720}).to_zarr(
+        ds.chunk({"time": 100, "lat": 360, "lon": 720}).to_zarr(
             mapper, mode=writing_mode, consolidated=True
         )
-    time.sleep(30)# to avoid TOO MANY REQUESTS error from Zenodo
+    time.sleep(60)# to avoid TOO MANY REQUESTS error from Zenodo
+    
     
 
 #---------------------------------------------------------
