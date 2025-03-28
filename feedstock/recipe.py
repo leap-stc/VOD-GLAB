@@ -1,6 +1,5 @@
 # switched to dask 'recipe'
 # input files were transfered in `transfer.sh` to LEAP OSN due to very slow server
-!pip install s3fs
 #---------------------------------------------------------
 # loading packages
 #---------------------------------------------------------
