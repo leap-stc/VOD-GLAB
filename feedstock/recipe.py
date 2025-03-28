@@ -57,7 +57,7 @@ for i, batch in enumerate(batches):
         writing_mode="w"
     else:
         writing_mode="a"
-        ds.to_zarr(
+    ds.to_zarr(
             mapper, mode=writing_mode, consolidated=True,append_dim="time" 
         )
     print("batch",i,"is getting written")
