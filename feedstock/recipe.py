@@ -50,20 +50,26 @@ for i, batch in enumerate(batches):
         coords="minimal",
         data_vars="minimal",
         compat="override",
-        parallel=True
+        parallel=True,
+        chunks={"time": 100, "lat": 360, "lon": 720}, #the original data is chunked so to change that chunking to be uniform, chunking is done here and later on
     )
-    #time.sleep(22)# to avoid TOO MANY REQUESTS error from Zenodo
+    ds = ds.chunk({"time": -1, "lat": 360, "lon": 720})  # <- RECHUNK TO FORCE UNIFORMITY
+
+    print(ds["VOD_residual"].chunks)
+    print(ds["VOD"].chunks)
+    print(ds["VOD_std"].chunks)
+    print(ds["VOD_residual_std"].chunks)
+
     if i == 0:
         writing_mode="w"
     else:
         writing_mode="a"
-        ds.chunk({"time": 100, "lat": 360, "lon": 720}).to_zarr(
-            mapper, mode=writing_mode, consolidated=True
+        ds.to_zarr(
+            mapper, mode=writing_mode, consolidated=True,append_dim="time" 
         )
-    time.sleep(60)# to avoid TOO MANY REQUESTS error from Zenodo
+    print("batch",i,"is getting written")
+    time.sleep(120)#adjust  to avoid TOO MANY REQUESTS error from Zenodo
     
-    
-
 #---------------------------------------------------------
 # 4. reading and plotting
 #-------------------------------------------------------
