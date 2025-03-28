@@ -53,12 +53,6 @@ for i, batch in enumerate(batches):
         chunks={"time": 100, "lat": 360, "lon": 720}, #the original data is chunked so to change that chunking to be uniform, chunking is done here and later on
     )
     ds = ds.chunk({"time": -1, "lat": 360, "lon": 720})  # <- RECHUNK TO FORCE UNIFORMITY
-
-    print(ds["VOD_residual"].chunks)
-    print(ds["VOD"].chunks)
-    print(ds["VOD_std"].chunks)
-    print(ds["VOD_residual_std"].chunks)
-
     if i == 0:
         writing_mode="w"
     else:
