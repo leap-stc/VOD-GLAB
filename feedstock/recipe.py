@@ -19,7 +19,7 @@ s3_fs = s3fs.S3FileSystem(
     anon=True, 
     client_kwargs={"endpoint_url": "https://nyu1.osn.mghpcc.org"}
 )
-mapper = s3_fs.get_mapper("leap-pangeo-pipeline/GLEAM/GLEAM.zarr")
+mapper = s3_fs.get_mapper("leap-pangeo-pipeline/VOD-GLAB/VOD-GLAB.zarr")
 
 # NetCDF URLs on zenedo
 netcdf_urls = [
