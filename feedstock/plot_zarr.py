@@ -6,7 +6,7 @@ def main():
     # 1) point at your Zarr store by URL
     cwd = os.getcwd()
     print(f"cwd is {cwd}")
-    store_url = "gcs://leap-persistant/mitraa90/GLAB-VOD.zarr"
+    store_url = "gcs://leap-scratch/mitraa90/GLAB-VOD.zarr"
 
     # 2) open it
     ds = xr.open_zarr(
