@@ -42,40 +42,43 @@ def main():
 
     # 4) Zarr store on GCS
     #zarr_store = "gcs://leap-scratch/mitraa90/GLAB-VOD.zarr"
-    zarr_store ="leap-persistant/mitraa90/GLAB-VOD/"
+    #zarr_store ="gcs://leap-persistent/mitraa90/GLAB-VOD/GLAB-VOD.zarr"
+    zarr_store="gs://leap-persistent/data-library/GLAB-VOD.zarr"
     fs.mkdirs(zarr_store, exist_ok=True)
     print(f"📁 Confirmed GCS folder: {base_path}")
     
     # 5) Process each batch: open, rechunk, write/append
-    for i, batch in enumerate(batches):
-        print(f"\n📂 Processing batch {i+1}/{len(batches)}:")
-        ds = xr.open_mfdataset(
-            batch,
-            engine="h5netcdf",
-            combine="by_coords",
-            coords="minimal",
-            data_vars="minimal",
-            compat="override",
-            parallel=True,
-            chunks={"time": 100, "lat": 360, "lon": 720},
-        )
-        ds = ds.chunk({"time": -1, "lat": 360, "lon": 720})
-        print(f"📦 Rechunked dataset: time={ds.dims['time']} steps")
+    i=0
+    batch=gcs_paths
+    #for i, batch in enumerate(batches):
+    print(f"\n📂 Processing batch {i+1}/{len(batches)}:")
+    ds = xr.open_mfdataset(
+        batch,
+        engine="h5netcdf",
+        combine="by_coords",
+        coords="minimal",
+        data_vars="minimal",
+        compat="override",
+        parallel=True,
+        chunks={"time": 377, "lat": 253, "lon": 320},
+    )
+    ds = ds.chunk({"time": 189, "lat": 253, "lon": 320})
+    print(f"📦 Rechunked dataset: time={ds.dims['time']} steps")
 
-        mode = "w" if i == 0 else "a"
+    mode = "w" if i == 0 else "a"
 
-        print(f"💾 Writing to Zarr (mode={mode})…")
-        if i == 0:
-            writing_mode="w"
-            ds.to_zarr(
-                    zarr_store, mode=writing_mode, consolidated=True
-                )
-        else:
-            writing_mode="a"
-            ds.to_zarr(
-                    zarr_store, mode=writing_mode, consolidated=True,append_dim="time" 
-                )
-        print(f"✅ Batch {i+1} done")
+    print(f"💾 Writing to Zarr (mode={mode})…")
+    if i == 0:
+        writing_mode="w"
+        ds.to_zarr(
+                zarr_store, mode=writing_mode, consolidated=True
+            )
+    else:
+        writing_mode="a"
+        ds.to_zarr(
+                zarr_store, mode=writing_mode, consolidated=True,append_dim="time" 
+            )
+    print(f"✅ Batch {i+1} done")
 
         #if needed time.sleep(20)
 
