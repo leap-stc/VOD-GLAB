@@ -15,7 +15,7 @@ def main():
 
     # 1) open normally (no Dask)
     ds = xr.open_dataset(
-        "gcs://leap-persistent/mitraa90/GLAB-VOD/GLAB-VOD.zarr",
+        file_dir,
         engine="zarr",
         backend_kwargs={"consolidated": False}
     )
