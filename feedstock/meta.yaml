@@ -6,6 +6,7 @@ recipes:
   - id: "GLAB-VOD"
     object: "recipe:GLAB-VOD"
 
+    
 provenance:
   providers:
     - name: "Columbia University"
@@ -27,20 +28,6 @@ provenance:
       roles:
         - host
       url: https://zenodo.org/doi/10.5281/zenodo.10306095
-
-license: "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)"
-
-citation:
-  - authors: "Skulovich, O., Li, X., Wigneron, J.-P., Gentine, P."
-    year: 2024
-    title: "Global L-band equivalent AI-based vegetation optical depth dataset"
-    journal: "Scientific Data"
-    volume: 11
-    pages: 936
-    doi: "10.1038/s41597-024-03810-2"
-
-contact:
-  email: "os2328@columbia.edu"
 
 maintainers:
   - name: "Mitra Cattry"
