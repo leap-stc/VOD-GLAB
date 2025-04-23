@@ -6,28 +6,32 @@ recipes:
   - id: "GLAB-VOD"
     object: "recipe:GLAB-VOD"
 
-    
+
+name: str = pydantic.Field(..., description='Name of the provider')
+description: str | None = pydantic.Field(None, description='Description of the provider')
+roles: list[str] | None = pydantic.Field(None, description='Roles of the provider')
+url: str | None = pydantic.Field(None, description='URL of the provider')
+
+
 provenance:
   providers:
     - name: "Columbia University"
       description: "Primary institution hosting the research and dataset generation"
       roles:
-        - producer
-        - research institution
-      url: https://climate.columbia.edu/
+        - host
+      url: "https://climate.columbia.edu/"
 
     - name: "INRAE - ISPA, University of Bordeaux"
       description: "Contributing institution providing SMAP-IB VOD, SMOS TB, and related data"
       roles:
         - data provider
-        - research institution
-      url: https://www.inrae.fr/
+      url: "https://www.inrae.fr/"
 
     - name: "Zenodo"
       description: "Permanent archive for GLAB-VOD and GLAB-TB datasets"
       roles:
-        - host
-      url: https://zenodo.org/doi/10.5281/zenodo.10306095
+        - data provider
+      url: "https://zenodo.org/doi/10.5281/zenodo.10306095"
 
 maintainers:
   - name: "Mitra Cattry"
