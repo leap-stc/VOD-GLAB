@@ -14,7 +14,7 @@ tags:
 stores:
   - id: "vod-glab"
     name: "VOD-GLAB Global L-band Vegetation Optical Depth"
-    url: "https://zenodo.org/records/10306095/files/VOD-GLAB_L-band_Vegetation_Optical_Depth.zarr"
-    source: "processed VOD sourced from SMOS (L-band), AMSR-2 (10.7, 18.7, 36.5 GHz), AMSR-E (same frequencies as AMSR-2)"
-    source_url: "https://zenodo.org/records/10306095"
+    url: "gs://leap-persistent/mitraa90/GLAB-VOD/GLAB-VOD.zarr"
+
+
 
