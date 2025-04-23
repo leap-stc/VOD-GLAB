@@ -25,7 +25,7 @@ provenance:
       roles:
         - data provider
       url: "https://zenodo.org/doi/10.5281/zenodo.10306095"
-
+  license: "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)"
 maintainers:
   - name: "Mitra Cattry"
     github: "mitraA90"
