@@ -14,7 +14,7 @@ tags:
 stores:
   - id: "vod-glab"
     name: "VOD-GLAB Global L-band Vegetation Optical Depth"
-    url: "gs://leap-persistent/mitraa90/GLAB-VOD/GLAB-VOD.zarr"
+    url: "gs://leap-persistent/data-library/GLAB-VOD/GLAB-VOD.zarr"
 
 
 
