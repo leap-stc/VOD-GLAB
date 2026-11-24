@@ -1,6 +1,6 @@
 title: "GLAB-VOD"
 description: >
-  The Global L-band equivalent AI-Based Vegetation Optical Depth (GLAB-VOD) dataset provides a long-term, temporally consistent record of vegetation optical depth from 2002 to 2020 at 25 km resolution and 18-day intervals. Using machine learning, this dataset extends the SMAP-IB VOD record by fusing brightness temperatures from SMOS, AMSR-E, and AMSR-2 with ancillary soil moisture data from CASM. A companion product, GLAB-TB, offers harmonized brightness temperatures used as intermediate inputs. GLAB-VOD is designed for applications in vegetation monitoring, biomass estimation, and climate studies.
+  GLAB-VOD is a global L-band vegetation optical depth dataset with 18-day temporal and 25 km spatial resolution, covering 2002 to 2020. A neural network reproduces the SMOS-SMAP-INRAE-BORDEAUX (SMOSMAP-IB) VOD product (2015 to 2020) from brightness temperatures of the SMOS, AMSR-E and AMSR-2 missions and the CASM soil moisture dataset. A side product, GLAB TB, is a daily 25 km brightness temperature dataset that matches SMOS quality back to 2002.
 
 recipes:
   - id: "GLAB-VOD"
@@ -24,8 +24,8 @@ provenance:
       description: "Permanent archive for GLAB-VOD and GLAB-TB datasets"
       roles:
         - data provider
-      url: "https://zenodo.org/doi/10.5281/zenodo.10306095"
-  license: "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)"
+      url: "https://doi.org/10.5281/zenodo.10306095"
+  license: "CC-BY-4.0"
 maintainers:
   - name: "Mitra Cattry"
     github: "mitraA90"
